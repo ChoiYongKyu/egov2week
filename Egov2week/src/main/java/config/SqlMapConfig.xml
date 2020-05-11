@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+<!--      vo객체와 테이블과의 관계 -->
+ 	<typeAliases>
+ 		<typeAlias alias="User" type="myspring.user.vo.UserVO"/>
+ 	</typeAliases>
+ </configuration>

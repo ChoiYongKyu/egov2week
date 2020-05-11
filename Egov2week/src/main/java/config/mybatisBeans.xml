@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	
+	
+	<!-- 여러 개의 Mapper 인터페이스 설정  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="myspring.user.dao" />
+		 <property name="annotationClass" value="myspring.user.dao.MyMapper" />
+	</bean> 
+	
+	<!-- 기존 Mapper 설정 -->	
+<!-- MapperFactoyBean은 UserMapper를 구현하는 프록시 클래스를 생성하고, 그것을 어플리케이션에 injection 한다.
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="myspring.user.dao.UserMapper" />
+		<property name="sqlSessionTemplate" ref="sqlSession" />
+	</bean> --> 
+	<!-- MyBatis 설정 (sqlSessionFactory생성하는 SqlSessionFactoryBean등록), Vo객체위치정보가있는 SqlMapConfig파일지정-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:config/SqlMapConfig.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:mapper/User.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" >
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 트랜잭션 관리를 위한 bean  -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	      <property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<context:component-scan base-package="myspring.user,myspring.aop.annot" />
+	
+</beans>

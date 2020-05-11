@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--   namespace mapping파일이 여러개있을때 id값이 중복될수 있기때문에  충돌이발생할수있다., mapperinterface쓸때와 비교해서
+ namespace이름이 달라진다.
+ resultType의 User == SqlMapConfig.xml 의 typeAlias 의 alias= User 과 같다. 이렇게 연결을 하면 MyBatis에서 자동으로 연결을 해준다.
+mapping 파일이 여러게 존재할때 select id = a , 다른 파일에 select id = a 가 같을경우 충돌이 일어날 수 있기때문에 mapper 태그에 namespace명을 설정한다.
+
+namespace 를 myspring.user.dao.UserMapper 로 변경한다.(mapper interface 사용시)
+--> 
+<mapper namespace="myspring.user.dao.UserMapper">
+    <!-- resultType : SqlMapConfig.xml의 alias 값 -->
+	<select id="selectUserById" parameterType="String" resultType="User">
+		select * from users where userid=#{userid}
+	</select>
+	<!-- 조회한 USERS 의 결과정보를 담아줄 VO객체 이름을 resultType 에 User이라는 이름으로  -->
+	<select id="selectUserList" resultType="User">
+		select * from users order by userid
+	</select>
+	<!-- insert는 프로그램에서 받기때문에 parameterType 에 alias 값 -->
+	<insert id="insertUser" parameterType="User" >
+		insert into users values (#{userid},#{name},#{gender},#{city})
+	</insert>
+	<update id="updateUser" parameterType="User">
+		update users set name=#{name},gender=#{gender},city=#{city} where userid=#{userid}
+	</update>
+	<delete id="deleteUser" parameterType="String" >
+		delete from users where userid =#{userid}
+	</delete>
+</mapper>
